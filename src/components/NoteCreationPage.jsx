@@ -30,7 +30,7 @@ const NoteCreationPage = () => {
     const [isSavePopupOpen, setIsSavePopupOpen] = useState(false);
     const [isDiscardPopupOpen, setIsDiscardPopupOpen] = useState(false);
     const [noteData, setNoteData] = useState({ title: '', content: '' });
-    const [isEditable, setIsEditable] = useState(true); // Initially, fields are editable
+    const [isEditable, setIsEditable] = useState(true);
 
 
     const navigate = useNavigate();
