@@ -5,6 +5,7 @@ import NoteCreationPage from './components/NoteCreationPage';
 import Cards from './components/Cards';
 import Register from './components/Register';
 import Login from './components/Login';
+import Search from './components/SearchPage';
 
 
 
@@ -17,7 +18,8 @@ function App() {
         <Route path="/create-note" element={<NoteCreationPage />} />
         <Route path="/cards" element={<Cards />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<Login />} />/
+        <Route path="/search" element={<Search />} />
 
       </Routes>
     </Router>

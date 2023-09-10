@@ -88,8 +88,9 @@ const NoteCreationPage = () => {
     };
 
     const handleSavePopupClose = () => {
-        setIsSavePopupOpen(false);
+        setIsDiscardPopupOpen(false);
     };
+
 
     const handleSaveChanges = () => {
         const newNote = {
@@ -101,7 +102,7 @@ const NoteCreationPage = () => {
             .then((response) => {
                 if (response.status === 201) {
                     console.log("Note saved successfully!");
-                    navigate('/cards');
+                    navigate('/homepage');
                 } else {
                     console.error("Failed to save the note.");
                 }
@@ -114,15 +115,23 @@ const NoteCreationPage = () => {
     };
 
     const handleDiscard = () => {
+        setIsDiscardPopupOpen(true);
     };
 
+
     const handleKeep = () => {
+        setIsDiscardPopupOpen(false);
     };
     const handleViewClick = () => {
         setIsEditable((prevIsEditable) => !prevIsEditable);
     };
     const handleDiscardPopupClose = () => {
         setIsDiscardPopupOpen(false);
+    };
+
+    const handleDiscardConfirmed = () => {
+        setIsDiscardPopupOpen(false);
+        navigate('/homepage');
     };
 
     return (
@@ -134,12 +143,9 @@ const NoteCreationPage = () => {
                         sx={{
                             backgroundColor: isDarkMode ? 'rgba(37, 37, 37, 1)' : 'white',
                         }}>
-                        <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                            <IconButton edge="start" color="inherit" aria-label="back">
-                                <KeyboardArrowLeftIcon />
-                            </IconButton>
-
-                        </Link>
+                        <IconButton edge="start" color="inherit" aria-label="back" onClick={handleDiscard}>
+                            <KeyboardArrowLeftIcon />
+                        </IconButton>
                         <div style={{ flexGrow: 1 }} />
                         <IconButton color="inherit" aria-label="view" onClick={handleViewClick}>
                             <VisibilityIcon />
@@ -172,25 +178,13 @@ const NoteCreationPage = () => {
                             <Button onClick={handleSavePopupClose} style={{ backgroundColor: 'red', color: 'white', margin: '0 8px' }}>
                                 Discard
                             </Button>
+
+
+
                             <Button onClick={handleSaveChanges} style={{ backgroundColor: 'green', color: 'white', margin: '0 8px' }}>
-                                Save
+
                             </Button>
 
-                        </Box>
-                    </DialogContent>
-                </Dialog>
-                <Dialog open={isDiscardPopupOpen} onClose={handleDiscardPopupClose}>
-                    <DialogContent>
-                        <Typography variant="h6" align="center" gutterBottom>
-                            Discard Changes?
-                        </Typography>
-                        <Box display="flex" justifyContent="center">
-                            <Button onClick={handleDiscard} style={{ backgroundColor: 'red', color: 'white', margin: '0 8px' }}>
-                                Discard
-                            </Button>
-                            <Button onClick={handleKeep} style={{ backgroundColor: 'green', color: 'white', margin: '0 8px' }}>
-                                Keep
-                            </Button>
                         </Box>
                     </DialogContent>
                 </Dialog>
@@ -204,6 +198,29 @@ const NoteCreationPage = () => {
                         style={{ border: 'none', padding: 0 }}
                         disabled={!isEditable}
                     />
+                    <Dialog open={isDiscardPopupOpen} onClose={handleSavePopupClose}>
+                        <DialogContent>
+                            <Box textAlign="center" mb={2}>
+                                <InfoIcon color="info" fontSize="large" />
+                            </Box>
+                            <Typography variant="h6" align="center" gutterBottom>
+                                Are you sure you want to discard your changes?
+                            </Typography>
+                            <Box display="flex" justifyContent="center">
+                                <Button
+                                    onClick={handleDiscardConfirmed}
+                                    style={{ backgroundColor: 'red', color: 'white', margin: '0 8px' }}
+                                >
+                                    Discard
+                                </Button>
+                                <Button onClick={handleKeep}
+                                    style={{ backgroundColor: 'green', color: 'white', margin: '0 8px' }}
+                                >
+                                    Keep
+                                </Button>
+                            </Box>
+                        </DialogContent>
+                    </Dialog>
 
                 </Box>
                 <Box >
@@ -225,3 +242,4 @@ const NoteCreationPage = () => {
 };
 
 export default NoteCreationPage
+
