@@ -9,7 +9,6 @@ import {
     Typography,
     Box,
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
 import centerImage from './images/File searching-cuate.png';
 
 const theme = createTheme({

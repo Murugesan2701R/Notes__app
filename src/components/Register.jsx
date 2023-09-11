@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -13,41 +13,67 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+const API_URL = 'https://64fa08ce4098a7f2fc154e5b.mockapi.io/users';
+
 function Register() {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
         password: '',
-        allowExtraEmails: false,
     });
 
-    const handleChange = (event) => {
-        const { name, value, type, checked } = event.target;
-        const newValue = type === 'checkbox' ? checked : value;
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
+    const handleChange = (event) => {
+        const { name, value } = event.target;
         setFormData({
             ...formData,
-            [name]: newValue,
+            [name]: value,
         });
     };
 
     const defaultTheme = createTheme();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        const existingEmail = localStorage.getItem('userData');
-        if (existingEmail) {
-            const userData = JSON.parse(existingEmail);
-            if (userData.email === formData.email) {
-                window.alert('Email already exists. Please choose a different email.');
-                return;
-            }
+        const emailExists = await checkEmailExists(formData.email);
+        if (emailExists) {
+            window.alert('Email is already registered.');
+            return;
         }
+        const newUser = {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            password: formData.password,
+        };
+        try {
+            const response = await axios.post(API_URL, newUser);
 
-        localStorage.setItem('userData', JSON.stringify(formData));
-        window.alert('User created successfully');
-        // console.log('User registered successfully');
+            if (response.status === 201) {
+                window.alert('User created successfully');
+                navigate('/');
+            } else {
+                console.log(setError('Failed to create user'))
+                window.alert('Failed to create user');
+            }
+        } catch (error) {
+            console.error('Error creating user:', error);
+            window.alert('An error occurred');
+        }
+    };
+
+    const checkEmailExists = async (email) => {
+        try {
+            const response = await axios.get(API_URL);
+            const users = response.data;
+            return users.some((user) => user.email === email);
+        } catch (error) {
+            console.error('Error checking email:', error);
+            return false;
+        }
     };
 
     return (
@@ -62,10 +88,18 @@ function Register() {
                         alignItems: 'center',
                     }}
                 >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign up
                     </Typography>
                     <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+                        {error && (
+                            <Typography color="error" align="center">
+                                {error}
+                            </Typography>
+                        )}
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
@@ -131,7 +165,6 @@ function Register() {
                         </Grid>
                     </Box>
                 </Box>
-
             </Container>
         </ThemeProvider>
     );

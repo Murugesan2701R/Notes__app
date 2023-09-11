@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -12,9 +13,11 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles'; // Import createTheme
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-export default function Login() {
+const API_URL = 'https://64fa08ce4098a7f2fc154e5b.mockapi.io/users';
+
+function Login() {
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -30,20 +33,27 @@ export default function Login() {
         });
     };
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const storedUserData = localStorage.getItem('userData');
-        if (storedUserData) {
-            const userData = JSON.parse(storedUserData);
-            if (userData.email === formData.email && userData.password === formData.password) {
-                navigate('/homepage');
-                return;
-            }
-        }
-        window.alert('Invalid username or password');
-    };
-
     const defaultTheme = createTheme();
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await axios.get(API_URL);
+            const users = response.data;
+
+            const user = users.find((u) => u.email === formData.email && u.password === formData.password);
+
+            if (user) {
+                window.alert('Login successful');
+                navigate('/homepage');
+            } else {
+                window.alert('Invalid username or password');
+            }
+        } catch (error) {
+            console.error('Error logging in:', error);
+            window.alert('An error occurred');
+        }
+    };
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -57,10 +67,13 @@ export default function Login() {
                         alignItems: 'center',
                     }}
                 >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                    <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <TextField
                             margin="normal"
                             required
@@ -114,3 +127,4 @@ export default function Login() {
     );
 }
 
+export default Login;
