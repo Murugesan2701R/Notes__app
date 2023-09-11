@@ -171,9 +171,9 @@ const Homepage = () => {
                         onClose={closeInfoDialog}
                         PaperProps={{
                             style: {
-                                width: '330px', // Set the width
-                                height: '236px', // Set the height
-                                borderRadius: '20px', // Set the border radius
+                                width: '330px',
+                                height: '236px',
+                                borderRadius: '20px',
                             },
                         }}>
                         <DialogContent>
@@ -214,7 +214,6 @@ const Homepage = () => {
             <Box
                 sx={{
                     backgroundColor: isDarkMode ? 'rgba(37, 37, 37, 1)' : '#ffffff',
-                    // minHeight: '100vh',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'space-between',
@@ -299,9 +298,9 @@ const Homepage = () => {
                     onClose={closeInfoDialog}
                     PaperProps={{
                         style: {
-                            width: '330px', // Set the width
-                            height: '236px', // Set the height
-                            borderRadius: '20px', // Set the border radius
+                            width: '330px',
+                            height: '236px',
+                            borderRadius: '20px',
                         },
                     }}>
                     <DialogContent>
@@ -335,98 +334,4 @@ const Homepage = () => {
         </ThemeProvider >
     );
 }
-
-
-//     return (
-//         <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
-//             <CssBaseline />
-//             <Box
-//                 sx={{
-//                     backgroundColor: isDarkMode ? 'rgba(37, 37, 37, 1)' : '#ffffff',
-//                     // minHeight: '100vh',
-//                     display: 'flex',
-//                     flexDirection: 'column',
-//                     justifyContent: 'space-between',
-//                 }}
-//             >
-//                 <AppBar position="static">
-//                     <Toolbar
-//                         sx={{
-//                             backgroundColor: isDarkMode ? 'rgba(37, 37, 37, 1)' : 'white',
-//                         }}
-//                     >
-//                         <Typography
-//                             variant="h6"
-//                             component="div"
-//                             sx={{
-//                                 flexGrow: 1,
-//                                 color: isDarkMode ? 'white' : 'rgba(37, 37, 37, 1)',
-//                                 textAlign: 'left',
-//                             }}
-//                         >
-//                             Notes
-//                         </Typography>
-//                         <IconButton onClick={toggleSearch} color={isDarkMode ? 'default' : 'inherit'}>
-//                             <SearchIcon />
-//                         </IconButton>
-
-//                         <IconButton color={isDarkMode ? 'default' : 'inherit'}>
-//                             <InfoIcon />
-//                         </IconButton>
-//                         <IconButton color={isDarkMode ? 'default' : 'inherit'} onClick={toggleDarkMode}>
-//                             {isDarkMode ? (
-//                                 <Brightness7Icon style={{ color: 'white' }} />
-//                             ) : (
-//                                 <Brightness4Icon style={{ color: 'rgba(37, 37, 37, 1)' }} />
-//                             )}
-//                         </IconButton>
-//                     </Toolbar>
-//                 </AppBar>
-//                 {!arr}?
-//                 <div
-//                     style={{
-//                         display: 'flex',
-//                         flexDirection: 'column',
-//                         justifyContent: 'center',
-//                         alignItems: 'center',
-//                         flex: 1,
-//                     }}
-//                 >
-//                     <img
-//                         src={centerImage}
-//                         alt="Centered Image"
-//                         style={{
-//                             maxWidth: '100%',
-//                             height: 'auto',
-//                             width: '80%',
-//                         }}
-//                     />
-//                     <p>Create a first one!</p>
-//                 </div>
-//                 <Cards cardData={cardData} />
-//                 <Link to="/create-note">
-//                     <Fab
-//                         color="primary"
-//                         aria-label="Add"
-//                         sx={{
-//                             position: 'fixed',
-//                             bottom: '16px',
-//                             right: '16px',
-//                             backgroundColor: isDarkMode ? 'rgba(37, 37, 37, 1)' : 'rgba(37, 37, 37, 1)',
-//                             color: 'white',
-//                             borderRadius: '50%',
-//                             boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)',
-//                             '&:hover': {
-//                                 backgroundColor: isDarkMode ? 'rgba(37, 37, 37, 1)' : 'grey',
-//                             },
-//                         }}
-//                     >
-//                         <AddIcon />
-//                     </Fab>
-//                 </Link>
-//             </Box>
-//         </ThemeProvider >
-//     );
-// };
-
 export default Homepage;
