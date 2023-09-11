@@ -25,6 +25,8 @@ import { Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import EditIcon from '@mui/icons-material/Edit';
+
 
 const NoteCreationPage = () => {
     const [isDarkMode, setIsDarkMode] = useState(true);
@@ -180,7 +182,11 @@ const NoteCreationPage = () => {
                         </IconButton>
                         <div style={{ flexGrow: 1 }} />
                         <IconButton color="inherit" aria-label="view" onClick={handleViewClick}>
-                            <VisibilityIcon />
+                            {isEditable ? (
+                                <VisibilityIcon />
+                            ) : (
+                                <EditIcon />
+                            )}
                         </IconButton>
 
                         <IconButton color="inherit" aria-label="save" onClick={handleSaveClick}>
