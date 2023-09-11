@@ -103,6 +103,8 @@ const theme = createTheme({
 });
 
 const SearchPage = () => {
+    // const [searchTerm, setSearchTerm] = useState('');
+    // const [searchResult, setSearchResult] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [searchResult, setSearchResult] = useState(null);
 
@@ -176,4 +178,3 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
-

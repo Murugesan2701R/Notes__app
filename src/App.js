@@ -20,6 +20,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/" element={<Login />} />/
         <Route path="/search" element={<Search />} />
+        <Route path="/edit-note/:id" element={<NoteCreationPage />} />
+        <Route path="/note-creation/:id" element={<NoteCreationPage />} />
 
       </Routes>
     </Router>

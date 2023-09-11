@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
     createTheme,
@@ -24,6 +24,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const NoteCreationPage = () => {
     const [isDarkMode, setIsDarkMode] = useState(true);
@@ -31,9 +32,9 @@ const NoteCreationPage = () => {
     const [isDiscardPopupOpen, setIsDiscardPopupOpen] = useState(false);
     const [noteData, setNoteData] = useState({ title: '', content: '' });
     const [isEditable, setIsEditable] = useState(true);
-
-
+    const { id } = useParams(); // Get the 'id' parameter from the URL
     const navigate = useNavigate();
+
     const lightTheme = createTheme({
         palette: {
             primary: {
@@ -97,23 +98,39 @@ const NoteCreationPage = () => {
             title: noteData.title,
             content: noteData.content,
         };
-        axios
-            .post("https://64fa08ce4098a7f2fc154e5b.mockapi.io/Notes", newNote)
-            .then((response) => {
-                if (response.status === 201) {
-                    console.log("Note saved successfully!");
-                    navigate('/homepage');
-                } else {
-                    console.error("Failed to save the note.");
-                }
-            })
-            .catch((error) => {
-                console.error("An error occurred while saving the note:", error);
-            });
+
+        if (id) { // If editing an existing note, send a PUT request to update it
+            axios
+                .put(`https://64fa08ce4098a7f2fc154e5b.mockapi.io/Notes/${id}`, newNote)
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log("Note updated successfully!");
+                        navigate('/homepage');
+                    } else {
+                        console.error("Failed to update the note.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("An error occurred while updating the note:", error);
+                });
+        } else { // If creating a new note, send a POST request to create it
+            axios
+                .post("https://64fa08ce4098a7f2fc154e5b.mockapi.io/Notes", newNote)
+                .then((response) => {
+                    if (response.status === 201) {
+                        console.log("Note saved successfully!");
+                        navigate('/homepage');
+                    } else {
+                        console.error("Failed to save the note.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("An error occurred while saving the note:", error);
+                });
+        }
 
         setIsSavePopupOpen(false);
     };
-
     const handleDiscard = () => {
         setIsDiscardPopupOpen(true);
     };
@@ -133,6 +150,21 @@ const NoteCreationPage = () => {
         setIsDiscardPopupOpen(false);
         navigate('/homepage');
     };
+
+
+
+    useEffect(() => {
+        if (id) { // If an ID is provided, fetch and populate an existing note
+            axios.get(`https://64fa08ce4098a7f2fc154e5b.mockapi.io/Notes/${id}`)
+                .then((response) => {
+                    const card = response.data;
+                    setNoteData({ title: card.title, content: card.content });
+                })
+                .catch((error) => {
+                    console.error('Error fetching card data:', error);
+                });
+        }
+    }, [id]);
 
     return (
         <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
@@ -175,14 +207,11 @@ const NoteCreationPage = () => {
                             Save Changes?
                         </Typography>
                         <Box display="flex" justifyContent="center">
-                            <Button onClick={handleSavePopupClose} style={{ backgroundColor: 'red', color: 'white', margin: '0 8px' }}>
+                            <Button onClick={handleDiscardConfirmed} style={{ backgroundColor: 'red', color: 'white', margin: '0 8px' }}>
                                 Discard
                             </Button>
-
-
-
                             <Button onClick={handleSaveChanges} style={{ backgroundColor: 'green', color: 'white', margin: '0 8px' }}>
-
+                                Save
                             </Button>
 
                         </Box>
@@ -242,4 +271,3 @@ const NoteCreationPage = () => {
 };
 
 export default NoteCreationPage
-
